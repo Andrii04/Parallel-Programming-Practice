@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &size); 
     
     total_tosses = 10;
-    local_in_circle = 0;
+    local_in_circle = 0;                               
 
     printf("Hey I'm Process %d!\n", rank);
 
@@ -34,6 +34,7 @@ int main(int argc, char** argv) {
             else printf("Not In Circle... Nay...\n");
         }
     }
+
     MPI_Reduce(&local_in_circle, &total_in_circle, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     printf("\n");
     if (rank == 0) {
