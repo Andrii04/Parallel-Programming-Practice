@@ -11,9 +11,9 @@ double get_rand_minus_one_one()
 int main(int argc, char **argv)
 {
     int rank, size;
-    int num_tosses = atoi(argv[1]);
+    int total_tosses = atoi(argv[1]);
     int local_tosses;
-    int num_hits, local_in_circle;
+    int total_in_circle, local_in_circle;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     srand(time(NULL) + rank);
     local_in_circle = 0;
 
-    local_tosses = num_tosses / size;
+    local_tosses = total_tosses / size;
     for (int i = 0; i < local_tosses; i++)
     {
 
@@ -35,11 +35,11 @@ int main(int argc, char **argv)
         }
     }
 
-    MPI_Reduce(&local_in_circle, &num_hits, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&local_in_circle, &total_in_circle, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     printf("\n");
     if (rank == 0)
     {
-        double pi_estimate = 4 * num_hits / ((double)num_tosses);
+        double pi_estimate = 4 * total_in_circle / ((double)total_tosses);
         printf("Estimate of pi = %f\n", pi_estimate);
     }
 
